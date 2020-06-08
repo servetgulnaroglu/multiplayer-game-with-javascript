@@ -1,7 +1,7 @@
 var socket; 
 var machines = [];
 var framePerSecond = 30;
-socket = io.connect('http://localhost:3000/');
+socket = io.connect('https://machine-game.netlify.app/');
 var canvas = document.getElementById('canvas');
 var canvasContext = canvas.getContext('2d');
 var gameOver = 0;
