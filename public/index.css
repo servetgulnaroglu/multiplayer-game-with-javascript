@@ -1,0 +1,18 @@
+#imageDiv{
+  display:none;
+}
+
+#health{
+ background-color:green;
+ position:absolute;
+ left: 125px;
+ top: 400px;
+ width: 160px;
+}
+
+.enemyHealthBar {
+  background-color: green;
+  position: absolute;
+  width: 30px;
+  height: 6px;
+}
