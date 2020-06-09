@@ -1,10 +1,10 @@
 var socket; 
-var machines = [];
+var machines = {};
 var framePerSecond = 30;
 socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
+//socket = io.connect('http://localhost:3000/')
 var canvas = document.getElementById('canvas');
 var canvasContext = canvas.getContext('2d');
-var gameOver = 0;
 var chat = document.getElementById('chat');
 
 chat.addEventListener('keyup', (e)=>{
@@ -12,16 +12,17 @@ chat.addEventListener('keyup', (e)=>{
 })
 socket.on('frame', updateMachines);
 socket.on('bullet', updateBullets);
-socket.on('gameOver', (data)=>{
-  gameOver = 1;
-});
 socket.on('chat', (data)=>{
   chat.value = data;
 })
 var enemyBullets = [];
 var machinePng = document.getElementById('image');
-var myMachine = new Machine();
+var myMachine = new Machine(canvas.width/2, canvas.height/2, 0, 100);
 var healthBar = document.getElementById('health');
+
+machines = {
+  'myMachine': myMachine
+}
 
 var keys = {
   w: false,
@@ -29,7 +30,6 @@ var keys = {
   rigthArrow: false,
   space: false
 }
-machines.push(myMachine);
 
 function gameOverText(data){
   }
@@ -38,18 +38,12 @@ function updateBullets(i){
 }
 
 function updateMachines(data){
-  var newMachine = new Machine();
-  newMachine.x = data.x;
-  newMachine.y = data.y;
-  newMachine.angle = data.angle;
-  newMachine.health = data.health;
   for(var i = 0; i < data.bullets.length; i++){
     var bullet = new Bullet(data.bullets[i].x, data.bullets[i].y, data.bullets[i].radian);
     enemyBullets.push(bullet);
-
   }
   //enemyBullets = data.bullets;
-  machines[1] = newMachine;
+  machines[data.id] = new Machine(data.x, data.y, data.angle, data.health);
 }
 window.onload = ()=>{
   setInterval(show, 1000/framePerSecond);
@@ -67,52 +61,77 @@ function updateHealthBar(){
 function update(){
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   checkKeys(); 
-  socket.emit('frame', myMachine);
+  if(myMachine.health >= 0 ){
+    socket.emit('frame', myMachine);
+  }
   isHit();
-}
-
-function draw(){
-  if(gameOver == 1){
+  console.log(myMachine.health);
+    var keys = Object.keys(machines)
+  /*if(keys.length == 1){
     canvasContext.fillStyle = 'black';
     canvasContext.font = '30px Arial';
     canvasContext.fillText('You won', 100, 100);
     return;
-  }
-  else if (gameOver == -1){
-    canvasContext.fillStyle = 'black';
-    canvasContext.font = '30px Arial';
-    canvasContext.fillText('You lost', 100, 100);
-    return;
-  }
+  }*/
+}
+/*
+
+
+    */
+function draw(){
   canvasContext.fillStyle = 'black';
   canvasContext.fillRect(0, 0, canvas.width, canvas.height);
   showEnemyBullets(); 
   showMachines();
-  drawHealthBar();
-  
-
-  enemyBullets = [];
+  drawHealthBar();  
+  enemyBullets = [];   
+  console.log(myMachine.health);
+  if(myMachine.health <= 0){
+    canvasContext.fillStyle = 'white';
+    canvasContext.font = '30px Arial';
+    canvasContext.fillText('You lost', 100, 100);
+    myMachine.x = -100;
+    myMachine.y = -100;
+  }
+  var keys = Object.keys(machines);
+  var isWon = true;
+  for(var i = 1; i < keys.length; i++){
+    if(machines[keys[i]].x < 0){
+      isWon = true;
+    }
+    else{
+      isWon = false;
+      break;
+    }
+  }
+  if(isWon){
+    canvasContext.fillStyle = 'white';
+    canvasContext.font = '30px Arial';
+    canvasContext.fillText('You won', 100, 100);
+  }
 }
 
-var hbar = document.createElement('progress');
+
+
 function drawHealthBar(){
-  if(machines.length == 2){
-  hbar.value = machines[1].health;
-  hbar.max = 100;
-  hbar.className = 'enemyHealthBar';
-  hbar.style.top = `${machines[1].y + 45}px`;
-  hbar.style.left = `${machines[1].x + 10}px`;
-  document.body.appendChild(hbar);
+  var keys = Object.keys(machines)
+    for(var i = 1; i < keys.length; i++){ 
+      var oldElement = document.querySelector(`#${keys[i]}`);
+      var hbar = oldElement || document.createElement('progress');
+      hbar.value = machines[keys[i]].health;
+      hbar.max = 100;
+      hbar.id = keys[i];
+      hbar.className = 'enemyHealthBar';
+      hbar.style.top = `${machines[keys[i]].y + 45}px`;
+      hbar.style.left = `${machines[keys[i]].x + 10}px`;
+      document.body.appendChild(hbar);
+        
 }}
 function isHit(){
   for(var i = 0; i < enemyBullets.length; i++){
     var bullet = enemyBullets[i];
     if((bullet.x > myMachine.x && bullet.x < myMachine.x + myMachine.size - bullet.size) && (bullet.y > myMachine.y && bullet.y < myMachine.y + myMachine.size - bullet.size)){
       myMachine.getDamage();
-      if(myMachine.health == 0 ){
-        gameOver = -1;
-        socket.emit('gameOver', 1);
-      }
       updateHealthBar();
       socket.emit('bullet', i);
     }
@@ -133,8 +152,9 @@ function showEnemyBullets(){
 }
 
 function showMachines(){
-  for(var i = 0; i < machines.length; i++){
-    machines[i].show();
+  var keys = Object.keys(machines)
+  for(var i = 0; i < keys.length; i++){
+    machines[keys[i]].show();
   }
 }
 window.addEventListener('keydown', e => {

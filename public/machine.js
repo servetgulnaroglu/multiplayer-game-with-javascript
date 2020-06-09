@@ -1,15 +1,15 @@
 class Machine{
-  constructor(){
-    this.x = canvas.width/2;
-    this.y = canvas.height/2;
-    this.angle = 0;
+  constructor(x, y, angle, health){
+    this.x = x;
+    this.y = y;
+    this.angle = angle;
     this.speed = 120/framePerSecond;
     this.size = 32;
     this.radian = this.angle * Math.PI/ 180.0;
     this.headX = this.x + this.size / 2 + Math.cos(this.radian) * this.size / 2;
     this.headY = this.y + this.size / 2 + Math.sin(this.radian) * this.size / 2;
     this.bullets = [];
-    this.health = 100;
+    this.health = health;
   }
 
   moveTop(){
