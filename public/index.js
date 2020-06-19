@@ -3,7 +3,8 @@ var machines = {};
 var framePerSecond = 30;
 socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
 //socket = io.connect('http://localhost:3000/')
-var maxCanvasWidth = 600;
+var maxCanvasWidth = 1920;
+var maxCanvasHeight = 1080;
 var reference = {
   x: 0,
   y: 0
@@ -14,7 +15,7 @@ keyButton.onclick = function(){
   keyCard.style.visibility = keyCard.style.visibility == 'visible'? 'hidden': 'visible';
 }
 var myMoney = 0;
-var maxCanvasHeight = 600;
+
 var canvas = document.getElementById('canvas');
 var cost = 20;
 var chatInput = document.getElementById('chatInput');
