@@ -3,18 +3,43 @@
 <html>
   <head>
     <title> deneme </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" >
     <link rel='stylesheet' type='text/css' href='index.css'>
   </head>
   <body>
-    <canvas id='canvas' width=400 height=400>
+    <div class="chatbox">
+      <ul spellcheck="false" id="chatList" class="chat-list"></ul>
+      <input spellcheck="false" id="chatInput" type="text" class="chat-input" placeholder="You can chat.."/>
+    </div>
+    <canvas id='canvas'>
+
     </canvas>
-    <div id="myProgress">
-      <progress id="health" value="100" max="100"></progress>
+    <input type='button' id='keyButton' style='' value='keys' >
+    <div id='keys'>
+      <ul>
+        <li>
+          Up Arrow: move forward
+        </li>
+        <li>
+          Left Arrow: turn Left
+        </li>
+        <li>
+          Right Arrow: turn Right
+        </li>
+        <li>
+          Spacebar: fire
+        </li>
+        <li>
+          1: upgrade range
+        </li>
+        <li>
+          2: upgrade ammo
+        </li>
+      </ul>
     </div>
     <div id='imageDiv'>
       <img id='image' src='images/machine.png'>
     </div>
-    <textarea id='chat' rows='10' cols='50'> Chat </textarea>
     <script src="/socket.io/socket.io.js"></script>
     <script src='bullet.js' type='text/javascript'></script>
     <script src='machine.js' type='text/javascript'></script>

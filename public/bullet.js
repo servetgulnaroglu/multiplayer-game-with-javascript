@@ -16,4 +16,9 @@ class Bullet{
     canvasContext.fillStyle = 'white';
     canvasContext.fillRect(this.x, this.y, this.size, this.size);
   }
+  
+  show(){
+    this.move();
+    this.draw();
+  }
 }
