@@ -12,7 +12,7 @@ class Machine{
     this.bullets = bullets;
     this.health = health;
     this.range = 250;
-    this.maxBulletCount = 5;
+    this.maxBulletCount = 8;
     this.score = 0;
   }
 
@@ -117,7 +117,7 @@ class Machine{
   }
 
   getDamage(){
-    this.health -= 1;
+    this.health -= 5;
   }
 
   increaseRange(){

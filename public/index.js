@@ -68,7 +68,6 @@ socket.on('message', (message) => {
   el.style.color = 'rgba(255,122,130,1)';
   chatList.appendChild(el);
   chatList.scrollTop = chatList.scrollHeight;
-  chatInput.value = '';
 })
 
 var machinePng = document.getElementById('image');

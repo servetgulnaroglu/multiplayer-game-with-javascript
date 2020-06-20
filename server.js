@@ -11,7 +11,6 @@ var io = socket(server);
 var machines = {};
 var bullets = [];
 io.sockets.on('connection', newConnection);
-
 function newConnection(socket){
   console.log('new connection: ' + socket.id);
   io.to(socket.id).emit('getID', socket.id);

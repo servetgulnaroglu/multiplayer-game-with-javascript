@@ -81,7 +81,6 @@ html, body {
   font-size: 16px;
 }
 
-
 #keys {
   position: absolute;
   width: 250px; 
@@ -89,3 +88,7 @@ html, body {
   left:5px;
   top:220px;
 }
+
+/*#chatList, #chatInput{
+  font-family: , Charcoal, sans-serif;
+}*/
