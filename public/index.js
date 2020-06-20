@@ -165,11 +165,8 @@ function draw(){
 function showMachines(){
   var keys = Object.keys(machines)
   var machine;
-  for(var i =0; i < myMachine.bullets.length; i++){
-    myMachine.bullets[i].draw();
-  }
- 
-  for(var i = 0; i < allBullets.length; i++){ 
+  
+   for(var i = 0; i < allBullets.length; i++){ 
     var is = false;
     for(var j = 0; j < myMachine.bullets.length; j++){
       if(allBullets[i].x == myMachine.bullets[j].x && allBullets[i].y == myMachine.bullets[j].y){
@@ -209,6 +206,10 @@ function showMachines(){
         j--;
       }
     }
+  }
+
+  for(var i = 0; i < keys.length; i++){
+    allBullets[i].show();
   }
   myMachine.update();
   myMachine.call();
