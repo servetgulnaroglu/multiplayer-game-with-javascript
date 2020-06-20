@@ -1,8 +1,8 @@
 var socket; 
 var machines = {};
 var framePerSecond = 30;
-socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
-//socket = io.connect('http://localhost:3000/')
+//socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
+socket = io.connect('http://localhost:3000/')
 var myID;
 socket.on('getID', (id)=>{
   myID = id;
@@ -50,12 +50,6 @@ var loop;
 socket.on('frame', (data) => {
   machines = data;
   var keys = Object.keys(data);
-  /*for(var i = 0; i < keys.length; i++){
-    for(var j = 0; j < data[keys[i]].machine.bullets.length; j++){
-      var bullet = new Bullet(data[keys[i]].machine.bullets[j].x,data[keys[i]].machine.bullets[j].y,data[keys[i]].machine.bullets[j].radian);
-      allBullets.push(bullet);
-    }
-  }*/
 });
 
 socket.on('bullet', (bullet) =>{
@@ -171,9 +165,7 @@ function draw(){
 function showMachines(){
   var keys = Object.keys(machines)
   var machine;
-    for(var i = 0; i < allBullets.length; i++){
-    allBullets[i].show();
-  }
+  
   for(var i = 0; i < allBullets.length; i++){ 
     var is = false;
     for(var j = 0; j < myMachine.bullets.length; j++){
@@ -193,7 +185,7 @@ function showMachines(){
     }
   }
   for(var i = 0; i < myMachine.bullets.length; i++){
-    myMachine.bullets[i].move();
+    myMachine.bullets[i].show();
   }
   for(var i = 0; i < allBullets.length; i++){
     console.log(allBullets[i].range);
@@ -204,7 +196,7 @@ function showMachines(){
   }
   for(var i = 0; i < keys.length; i++){
     for(var j = 0; j < myMachine.bullets.length; j++){
-      if(myMachine.bullets[j].x > machines[keys[i]].machine.x &&
+      if(keys[i] != myID && myMachine.bullets[j].x > machines[keys[i]].machine.x &&
         myMachine.bullets[j].x < machines[keys[i]].machine.x + myMachine.size - myMachine.bullets[j].size &&
         myMachine.bullets[j].y > machines[keys[i]].machine.y && 
         myMachine.bullets[j].y < machines[keys[i]].machine.y + myMachine.size - myMachine.bullets[j].size

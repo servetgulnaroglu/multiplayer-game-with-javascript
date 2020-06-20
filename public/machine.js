@@ -25,10 +25,10 @@ class Machine{
   }
 
   moveBack(){
-    if(this.y - Math.sin(this.radian) * this.speed >=  0 && this.y - Math.sin(this.radian) * this.speed <= maxCanvasHeight- this.size 
-      && this.x - Math.cos(this.radian) * this.speed >= 0 && this.x - Math.cos(this.radian) * this.speed <= maxCanvasWidth - this.size){
-      this.y -= Math.sin(this.radian) * this.speed;
-      this.x -= Math.cos(this.radian) * this.speed; 
+    if(this.y - Math.sin(this.radian) * this.speed / 2>=  0 && this.y - Math.sin(this.radian) * this.speed / 2 <= maxCanvasHeight- this.size 
+      && this.x - Math.cos(this.radian) * this.speed / 2>= 0 && this.x - Math.cos(this.radian) * this.speed / 2 <= maxCanvasWidth - this.size){
+      this.y -= Math.sin(this.radian) * this.speed / 2;
+      this.x -= Math.cos(this.radian) * this.speed / 2; 
     }
   }
 
