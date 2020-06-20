@@ -2,9 +2,9 @@ var express = require('express');
 var path = require('path');
 const serverless = require('serverless-http');
 var app = express();
-const port = process.env.PORT || 3000
-var server = app.listen(port);
-//var server = app.listen(3000);
+//const port = process.env.PORT || 3000
+//var server = app.listen(port);
+var server = app.listen(3000);
 app.use(express.static('public'));//folder name = public 
 var socket = require('socket.io');
 var io = socket(server);
@@ -14,6 +14,7 @@ io.sockets.on('connection', newConnection);
 
 function newConnection(socket){
   console.log('new connection: ' + socket.id);
+  io.to(socket.id).emit('getID', socket.id);
   machines[socket.id] = {
     machine: {
       playerName: 'inLobby',

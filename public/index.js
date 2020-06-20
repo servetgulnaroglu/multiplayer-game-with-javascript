@@ -1,8 +1,13 @@
 var socket; 
 var machines = {};
 var framePerSecond = 30;
-socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
-//socket = io.connect('http://localhost:3000/')
+//socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
+socket = io.connect('http://localhost:3000/')
+var myID;
+socket.on('getID', (id)=>{
+  myID = id;
+})
+
 var maxCanvasWidth = 1920;
 var maxCanvasHeight = 1080;
 var reference = {
@@ -69,6 +74,7 @@ var keys = {
   w: false,
   leftArrow: false,
   rigthArrow: false,
+  downArrow: false,
   space: false,
   one: false,
   two: false,
@@ -199,8 +205,9 @@ function showMachines(){
     }
   }
   myMachine.update();
+  myMachine.call();
   for(var i = 0; i < keys.length; i++){ 
-    if(machines[keys[i]].machine.health > 0){
+    if(myID != keys[i] && machines[keys[i]].machine.health > 0){
       machine = new Machine(machines[keys[i]].machine.x, machines[keys[i]].machine.y, machines[keys[i]].machine.angle, machines[keys[i]].machine.health, machines[keys[i]].machine.playerName, machines[keys[i]].machine.bullets);
       machine.call(); 
     }
@@ -330,12 +337,14 @@ window.addEventListener('keydown', e => {
     keys['two'] = true;
   } else if (e.keyCode == 13){
     keys['enter'] = true;
+  } else if (e.keyCode == 40){
+    keys['downArrow'] = true;
   }
 })
 
-/*window.addEventListener('scroll', ()=>{
+window.addEventListener('scroll', ()=>{
   window.scrollTo(0, 0);
-});*/
+});
 
 window.addEventListener('keyup', e => {
   /*if(e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 37 || e.keyCode == 32)
@@ -354,6 +363,8 @@ window.addEventListener('keyup', e => {
     keys['two'] = false;
   } else if (e.keyCode == 13){
     keys['enter'] = false;
+  } else if (e.keyCode == 40){
+    keys['downArrow'] = false;
   }
 })
 
@@ -385,6 +396,9 @@ function checkKeys(){
   if(keys.enter && gameState == gameStates.ENTER_MENU) {
     button.onclick();
     keys['enter'] = false;
+  }
+  if(keys.downArrow){
+    myMachine.moveBack();
   }
 }
 
