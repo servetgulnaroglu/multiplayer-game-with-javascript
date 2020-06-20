@@ -165,7 +165,10 @@ function draw(){
 function showMachines(){
   var keys = Object.keys(machines)
   var machine;
-  
+  for(var i =0; i < myMachine.bullets.length; i++){
+    myMachine.bullets[i].draw();
+  }
+ 
   for(var i = 0; i < allBullets.length; i++){ 
     var is = false;
     for(var j = 0; j < myMachine.bullets.length; j++){
@@ -188,7 +191,6 @@ function showMachines(){
     myMachine.bullets[i].show();
   }
   for(var i = 0; i < allBullets.length; i++){
-    console.log(allBullets[i].range);
     if(allBullets[i].range - 25 < Math.sqrt(Math.pow(allBullets[i].x - allBullets[i].startX, 2) + Math.pow(allBullets[i].y - allBullets[i].startY, 2))){
       allBullets.splice(i, 1);
       i--;
