@@ -1,8 +1,8 @@
 var socket; 
 var machines = {};
 var framePerSecond = 30;
-socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
-//socket = io.connect('http://localhost:3000/')
+//socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
+socket = io.connect('http://localhost:3000/')
 var myID;
 socket.on('getID', (id)=>{
   myID = id;
