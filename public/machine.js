@@ -107,9 +107,13 @@ class Machine{
   }
 
   fire(){
+    this.headX = this.x + this.size / 2 + Math.cos(this.radian) * this.size / 2;
+    this.headY = this.y + this.size / 2 + Math.sin(this.radian) * this.size / 2;
     if(this.bullets.length < this.maxBulletCount){
-      this.bullets.push(new Bullet(this.headX, this.headY, this.radian));
+      this.bullets.push(new Bullet(this.headX, this.headY, this.radian, this.range));
+      return true;
     }    
+    return false;
   }
 
   getDamage(){

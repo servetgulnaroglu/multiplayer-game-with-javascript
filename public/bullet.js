@@ -1,15 +1,18 @@
 class Bullet{
-  constructor(x, y, radian){
+  constructor(x, y, radian, range){
     this.x = x;
     this.y = y;
+    this.startX = x;
+    this.startY = y;
     this.radian = radian;
     this.speed = 240/framePerSecond;
     this.size = 5;
+    this.range = range;
   }
 
   move(){ 
     this.y += Math.sin(this.radian) * this.speed;
-    this.x += Math.cos(this.radian) * this.speed;
+    this.x += Math.cos(this.radian) * this.speed; 
   }
 
   draw(){

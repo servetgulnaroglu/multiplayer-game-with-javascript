@@ -1,8 +1,8 @@
 var socket; 
 var machines = {};
 var framePerSecond = 30;
-//socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
-socket = io.connect('http://localhost:3000/')
+socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
+//socket = io.connect('http://localhost:3000/')
 var myID;
 socket.on('getID', (id)=>{
   myID = id;
@@ -50,14 +50,17 @@ var loop;
 socket.on('frame', (data) => {
   machines = data;
   var keys = Object.keys(data);
-  allBullets = [];
-  for(var i = 0; i < keys.length; i++){
+  /*for(var i = 0; i < keys.length; i++){
     for(var j = 0; j < data[keys[i]].machine.bullets.length; j++){
       var bullet = new Bullet(data[keys[i]].machine.bullets[j].x,data[keys[i]].machine.bullets[j].y,data[keys[i]].machine.bullets[j].radian);
       allBullets.push(bullet);
     }
-  }
+  }*/
 });
+
+socket.on('bullet', (bullet) =>{
+  allBullets.push(new Bullet(bullet.x, bullet.y, bullet.radian, bullet.range));
+})
 
 socket.on('message', (message) => {
   var el = document.createElement('li');
@@ -139,6 +142,7 @@ function update(){
   canvasContext.translate(-(myMachine.x - canvas.width / 2 + reference.x),-( myMachine.y - canvas.height / 2 + reference.y));
   reference.x += -(myMachine.x - canvas.width / 2 + reference.x);
   reference.y += -(myMachine.y - canvas.height / 2 + reference.y);  
+  
 }
 
 function draw(){
@@ -185,10 +189,19 @@ function showMachines(){
       allBullets[i].y > myMachine.y   && allBullets[i].y < myMachine.y + myMachine.size  
       ){
       myMachine.getDamage();
+      allBullets.splice(i, 1);
+      i--;
     }
   }
   for(var i = 0; i < myMachine.bullets.length; i++){
     myMachine.bullets[i].move();
+  }
+  for(var i = 0; i < allBullets.length; i++){
+    console.log(allBullets[i].range);
+    if(allBullets[i].range - 25 < Math.sqrt(Math.pow(allBullets[i].x - allBullets[i].startX, 2) + Math.pow(allBullets[i].y - allBullets[i].startY, 2))){
+      allBullets.splice(i, 1);
+      i--;
+    }
   }
   for(var i = 0; i < keys.length; i++){
     for(var j = 0; j < myMachine.bullets.length; j++){
@@ -206,6 +219,9 @@ function showMachines(){
   }
   myMachine.update();
   myMachine.call();
+  for(var i =0; i < myMachine.bullets.length; i++){
+    myMachine.bullets[i].draw();
+  }
   for(var i = 0; i < keys.length; i++){ 
     if(myID != keys[i] && machines[keys[i]].machine.health > 0){
       machine = new Machine(machines[keys[i]].machine.x, machines[keys[i]].machine.y, machines[keys[i]].machine.angle, machines[keys[i]].machine.health, machines[keys[i]].machine.playerName, machines[keys[i]].machine.bullets);
@@ -375,8 +391,11 @@ function checkKeys(){
     myMachine.turnRight();
   if(keys.leftArrow)
     myMachine.turnLeft();
-  if(keys.space)
-    myMachine.fire();
+  if(keys.space){
+    if(myMachine.fire()){
+      socket.emit('bullet', {x: myMachine.headX, y: myMachine.headY, radian: myMachine.radian, range:myMachine.range});
+    }
+  }
   if(keys.one && myMoney >= cost){
     keys['one'] = false;
     myMachine.increaseRange();
