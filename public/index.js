@@ -208,7 +208,7 @@ function showMachines(){
     }
   }
 
-  for(var i = 0; i < keys.length; i++){
+  for(var i = 0; i < allBullets.length; i++){
     allBullets[i].show();
   }
   myMachine.update();
