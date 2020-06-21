@@ -1,17 +1,23 @@
 var socket; 
 var machines = {};
 var framePerSecond = 45;
-socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
-//socket = io.connect('http://localhost:3000/')
+//socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
+socket = io.connect('http://localhost:3000/')
 var myID;
 socket.on('getID', (id)=>{
   myID = id;
 })
 var players = document.getElementById('players');
 var maxCanvasWidth = 1920;
+var shouldDrawHealthAnimation = false;
 var maxCanvasHeight = 1080;
 var button;
+var healthAnimationX;
+var healthAnimationY;
 var playerCount;
+var increment; 
+var particleRange = 50;
+var particleCount = 4;
 var reference = {
   x: 0,
   y: 0
@@ -169,6 +175,8 @@ function draw(){
   showBulletCount();
   showMoney();
   animateMoney();
+  if(shouldDrawHealthAnimation)
+    showHealEffect(increment, healthAnimationX, healthAnimationY);
   if(myMachine.health <= 0){
     clearInterval(loop);
     gameState = gameStates.GAME_OVER_MENU;
@@ -195,6 +203,7 @@ function showMachines(){
       allBullets[i].y > myMachine.y   && allBullets[i].y < myMachine.y + myMachine.size  
       ){
       myMachine.getDamage();
+      showParticles(allBullets[i]);
       allBullets.splice(i, 1);
       i--;
     }
@@ -211,10 +220,21 @@ function showMachines(){
   for(var i = 0; i < keys.length; i++){
     for(var j = 0; j < myMachine.bullets.length; j++){
       if(keys[i] != myID && myMachine.bullets[j].x > machines[keys[i]].machine.x &&
-        myMachine.bullets[j].x < machines[keys[i]].machine.x + myMachine.size - myMachine.bullets[j].size &&
+        myMachine.bullets[j].x < machines[keys[i]].machine.x + myMachine.size &&
         myMachine.bullets[j].y > machines[keys[i]].machine.y && 
-        myMachine.bullets[j].y < machines[keys[i]].machine.y + myMachine.size - myMachine.bullets[j].size
+        myMachine.bullets[j].y < machines[keys[i]].machine.y + myMachine.size
       ){
+        showParticles(myMachine.bullets[j]);
+        if(machines[keys[i]].machine.health <= 6){
+          shouldDrawHealthAnimation = true;
+          increment = myMachine.health + 50 > 100 ? 100 - myMachine.health: 50; 
+          myMachine.health += increment;
+          healthAnimationX = myMachine.x;
+          healthAnimationY = myMachine.y;
+          setTimeout(function(){
+            shouldDrawHealthAnimation = false;
+          }, 1400); 
+        }
         myMachine.bullets.splice(j, 1);
         myMachine.score += 3;
         myMoney += 3;
@@ -347,6 +367,43 @@ function sendMessage(){
   socket.emit('message', message);
 }
 
+function showParticles(bullet){
+  var particles = [];
+  var particles2 = [];
+  for(var i = 0; i < particleCount; i++){
+    particles.push(new Bullet(bullet.x, bullet.y, bullet.radian + Math.PI/4 + (Math.PI * i / 2), particleRange));
+  } 
+  for(var i = 0; i < particleCount; i++){
+    particles2.push(new Bullet(bullet.x, bullet.y, bullet.radian + (Math.PI * i / 2), particleRange / 2))
+  }
+  var particleLoop = setInterval(function(){
+    for(var i = 0; i < particles.length; i++){
+      particles[i].show();
+    }
+  }, 1000/framePerSecond);
+  var particle2Loop = setInterval(function(){
+    for( var i = 0; i < particles2.length; i++){
+      particles2[i].show();
+    }
+  }, 1000/ framePerSecond);
+
+  setTimeout(function(){
+    clearInterval(particle2Loop);
+    particles2 = [];
+  }, 100);
+
+  setTimeout(function(){
+    clearInterval(particleLoop);
+    particles = [];
+  },200);
+}
+
+function showHealEffect(increment, x, y){  
+  canvasContext.fillStyle = 'green';
+  canvasContext.font = 'bold 36px Arial';
+  canvasContext.fillText( '+' + increment, x, y);
+}
+
 window.addEventListener('keydown', e => {
   if(e.keyCode == 38){
     keys['w'] = true;
@@ -427,8 +484,7 @@ function checkKeys(){
   if(keys.enter && chatInput.value != ''){
     sendMessage();
     keys['enter'] = false;
-  }
-  
+  } 
   if(keys.downArrow){
     myMachine.moveBack();
   }
