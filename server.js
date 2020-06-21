@@ -10,14 +10,18 @@ var socket = require('socket.io');
 var io = socket(server);
 var machines = {};
 var bullets = [];
+var playerCount = 0; 
+var loop;
 io.sockets.on('connection', newConnection);
 function newConnection(socket){
+  playerCount++;
   console.log('new connection: ' + socket.id);
   io.to(socket.id).emit('getID', socket.id);
+  io.emit('playerCount', playerCount);
   machines[socket.id] = {
     machine: {
       playerName: 'inLobby',
-      x: -100,
+      x: -1200,
       y: 0,
       angle: 0,
       speed: 4,
@@ -29,7 +33,19 @@ function newConnection(socket){
       health: 100
     }
   };
-
+  
+  var sendLoop = setInterval(function(){
+    var keys = Object.keys(machines);
+    var playerOrder = [];
+    for(var i = 0; i < keys.length; i++){
+      playerOrder.push({name: machines[keys[i]].machine.playerName, score: machines[keys[i]].machine.score});
+    }
+    playerOrder.sort(function(a,b){return b.score - a.score});
+    if(playerOrder.length > 10){
+      playerOrder.splice(10, playerOrder.length);
+    }
+    io.emit('sortedPlayers', playerOrder);
+  }, 1000);
   socket.on('frame', (data) => {
     machines[socket.id] = {
       machine: data
@@ -46,6 +62,8 @@ function newConnection(socket){
   socket.on('disconnect', (data) => {
     console.log('connection lost: ' + socket.id);
     console.log('deleted' + machines.id);
+    playerCount--;
+    io.emit('playerCount', playerCount);
     delete machines[socket.id];
-  })
+  })   
 }

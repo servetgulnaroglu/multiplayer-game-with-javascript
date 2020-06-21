@@ -1,15 +1,16 @@
 var socket; 
 var machines = {};
-var framePerSecond = 30;
-socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
-//socket = io.connect('http://localhost:3000/')
+var framePerSecond = 45;
+//socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
+socket = io.connect('http://localhost:3000/')
 var myID;
 socket.on('getID', (id)=>{
   myID = id;
 })
-
+var players = document.getElementById('players');
 var maxCanvasWidth = 1920;
 var maxCanvasHeight = 1080;
+var playerCount;
 var reference = {
   x: 0,
   y: 0
@@ -20,7 +21,7 @@ keyButton.onclick = function(){
   keyCard.style.visibility = keyCard.style.visibility == 'visible'? 'hidden': 'visible';
 }
 var myMoney = 0;
-
+var leaderList = document.getElementById('leaderList')
 var canvas = document.getElementById('canvas');
 var cost = 20;
 var chatInput = document.getElementById('chatInput');
@@ -47,6 +48,9 @@ var gameStates = {
 }
 var gameState = gameStates.ENTER_MENU;
 var loop;
+socket.on('playerCount', (count) => {
+    players.textContent = 'Players: ' + (count);
+})
 socket.on('frame', (data) => {
   machines = data;
   var keys = Object.keys(data);
@@ -63,7 +67,15 @@ socket.on('message', (message) => {
   chatList.appendChild(el);
   chatList.scrollTop = chatList.scrollHeight;
 })
-
+  
+socket.on('sortedPlayers', (sortedPlayers)=>{
+  leaderList.innerHTML = '';
+  for(var i = 0; i < sortedPlayers.length; i++){
+    var li = document.createElement('li');
+    li.textContent= sortedPlayers[i].name;
+    leaderList.appendChild(li);
+  }
+})
 var machinePng = document.getElementById('image');
 var healthBar = document.getElementById('health');
 var keys = {
@@ -201,8 +213,8 @@ function showMachines(){
         myMachine.bullets[j].y < machines[keys[i]].machine.y + myMachine.size - myMachine.bullets[j].size
       ){
         myMachine.bullets.splice(j, 1);
-        myMachine.score++;
-        myMoney++;
+        myMachine.score += 3;
+        myMoney += 3;
         j--;
       }
     }
@@ -211,6 +223,7 @@ function showMachines(){
   for(var i = 0; i < allBullets.length; i++){
     allBullets[i].show();
   }
+
   myMachine.update();
   myMachine.call();
   for(var i =0; i < myMachine.bullets.length; i++){
@@ -261,7 +274,7 @@ function gameOver(){
   button.autofocus = true;
   button.onclick = () =>{
     playerName = input.value;
-    myMachine = new Machine( Math.random() * 368, Math.random() * 368 , 0, 100,playerName ,[]);
+    myMachine = new Machine(Math.random() * (maxCanvasWidth - 50) , Math.random() * (maxCanvasHeight - 50), 0, 100,playerName ,[]);
     gameState = gameStates.GAME;
     var el = document.getElementById('name');
     el.parentNode.removeChild(el);
@@ -332,7 +345,6 @@ function sendMessage(){
 }
 
 window.addEventListener('keydown', e => {
- // e.preventDefault();
   if(e.keyCode == 38){
     keys['w'] = true;
   } else if (e.keyCode == 39){

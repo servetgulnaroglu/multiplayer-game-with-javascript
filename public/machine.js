@@ -37,7 +37,7 @@ class Machine{
     this.headY = this.y + this.size / 2 + Math.sin(this.radian) * this.size / 2;
     for(var i = 0; i < this.bullets.length; i++){
       var bullet = this.bullets[i];
-      if(Math.sqrt(Math.pow(bullet.x - (this.x + this.size / 2), 2) + Math.pow(bullet.y - (this.y + this.size / 2), 2)) > this.range - 4 ){
+      if(Math.sqrt(Math.pow(bullet.x - bullet.startX, 2) + Math.pow(bullet.y - bullet.startY, 2)) > this.range - 16 ){
         this.bullets.splice(i,1);
       }
     }
@@ -90,7 +90,7 @@ class Machine{
   }
 
   turnRight(){
-    this.angle -= 10;
+    this.angle -= 300/framePerSecond;
     this.radian = -this.angle * Math.PI/ 180.0;
   }
 
@@ -102,7 +102,7 @@ class Machine{
   }
 
   turnLeft(){
-    this.angle += 10;
+    this.angle += 300/framePerSecond;
     this.radian = -this.angle * Math.PI/ 180.0;
   }
 

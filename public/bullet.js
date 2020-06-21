@@ -5,7 +5,7 @@ class Bullet{
     this.startX = x;
     this.startY = y;
     this.radian = radian;
-    this.speed = 240/framePerSecond;
+    this.speed = 300/framePerSecond;
     this.size = 5;
     this.range = range;
   }
