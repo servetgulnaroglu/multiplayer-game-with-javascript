@@ -41,8 +41,8 @@ function newConnection(socket){
       playerOrder.push({name: machines[keys[i]].machine.playerName, score: machines[keys[i]].machine.score});
     }
     playerOrder.sort(function(a,b){return b.score - a.score});
-    if(playerOrder.length > 10){
-      playerOrder.splice(10, playerOrder.length);
+    if(playerOrder.length > 5){
+      playerOrder.splice(5, playerOrder.length);
     }
     io.emit('sortedPlayers', playerOrder);
   }, 1000);

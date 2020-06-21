@@ -10,6 +10,7 @@ socket.on('getID', (id)=>{
 var players = document.getElementById('players');
 var maxCanvasWidth = 1920;
 var maxCanvasHeight = 1080;
+var button;
 var playerCount;
 var reference = {
   x: 0,
@@ -71,9 +72,11 @@ socket.on('message', (message) => {
 socket.on('sortedPlayers', (sortedPlayers)=>{
   leaderList.innerHTML = '';
   for(var i = 0; i < sortedPlayers.length; i++){
-    var li = document.createElement('li');
-    li.textContent= sortedPlayers[i].name;
-    leaderList.appendChild(li);
+    if(sortedPlayers[i].name != 'inLobby'){
+      var li = document.createElement('li');
+      li.innerHTML = sortedPlayers[i].name + '<br>' + sortedPlayers[i].score;
+      leaderList.appendChild(li);
+    }  
   }
 })
 var machinePng = document.getElementById('image');
@@ -263,7 +266,7 @@ function gameOver(){
   input.style.top = `${y}px`;
   input.style.left = `${x}px`;
   document.body.appendChild(input);
-  var button = document.getElementById('button') || document.createElement('input');
+  button = document.getElementById('button') || document.createElement('input');
   button.type = 'button';
   button.value = 'START';
   button.id = 'button';
@@ -390,6 +393,13 @@ window.addEventListener('keyup', e => {
   }
 })
 
+window.addEventListener('keydown', e => {
+  if(e.keyCode == 13 && (gameState == gameStates.ENTER_MENU || gameState == gameStates.GAME_OVER_MENU)) {
+    button.click();
+  }
+})
+
+
 function checkKeys(){
   if(keys.w)
     myMachine.moveTop();
@@ -418,10 +428,7 @@ function checkKeys(){
     sendMessage();
     keys['enter'] = false;
   }
-  if(keys.enter && gameState == gameStates.ENTER_MENU) {
-    button.onclick();
-    keys['enter'] = false;
-  }
+  
   if(keys.downArrow){
     myMachine.moveBack();
   }
