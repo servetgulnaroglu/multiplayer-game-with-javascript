@@ -17,7 +17,7 @@ class Machine{
   }
 
   moveTop(){
-    if(this.y + Math.sin(this.radian) * this.speed >=  0 && this.y + Math.sin(this.radian) * this.speed <= maxCanvasHeight- this.size 
+        if(this.y + Math.sin(this.radian) * this.speed >=  0 && this.y + Math.sin(this.radian) * this.speed <= maxCanvasHeight- this.size 
       && this.x + Math.cos(this.radian) * this.speed >= 0 && this.x + Math.cos(this.radian) * this.speed <= maxCanvasWidth - this.size){
       this.y += Math.sin(this.radian) * this.speed;
       this.x += Math.cos(this.radian) * this.speed; 
@@ -32,7 +32,7 @@ class Machine{
     }
   }
 
-  update(){
+  update(){ 
     this.headX = this.x + this.size / 2 + Math.cos(this.radian) * this.size / 2;
     this.headY = this.y + this.size / 2 + Math.sin(this.radian) * this.size / 2;
     for(var i = 0; i < this.bullets.length; i++){
@@ -47,6 +47,11 @@ class Machine{
     this.drawImage(this.x, this.y, this.size, this.size, this.angle);
     this.drawHealthBar();  
     this.drawName();
+    
+  }
+
+  drawTail(){
+    
   }
 
   showRange(){

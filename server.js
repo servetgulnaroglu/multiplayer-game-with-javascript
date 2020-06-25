@@ -1,6 +1,6 @@
 var express = require('express');
-var path = require('path');
-const serverless = require('serverless-http');
+//var path = require('path');
+//const serverless = require('serverless-http');
 var app = express();
 const port = process.env.PORT || 3000
 var server = app.listen(port);
@@ -38,7 +38,9 @@ function newConnection(socket){
     var keys = Object.keys(machines);
     var playerOrder = [];
     for(var i = 0; i < keys.length; i++){
-      playerOrder.push({name: machines[keys[i]].machine.playerName, score: machines[keys[i]].machine.score});
+      if(machines[keys[i]].machine.playerName != "inLobby"){
+        playerOrder.push({name: machines[keys[i]].machine.playerName, score: machines[keys[i]].machine.score});  
+      }
     }
     playerOrder.sort(function(a,b){return b.score - a.score});
     if(playerOrder.length > 5){
