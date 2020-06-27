@@ -3,7 +3,7 @@ class Machine{
     this.playerName = playerName;
     this.x = x;
     this.y = y;
-    this.angle = angle;
+    this.angle = Math.floor(angle);
     this.speed = 120/framePerSecond;
     this.size = 32;
     this.radian = this.angle * Math.PI/ 180.0;
@@ -47,7 +47,7 @@ class Machine{
     this.drawImage(this.x, this.y, this.size, this.size, this.angle);
     this.drawHealthBar();  
     this.drawName();
-    
+
   }
 
   drawTail(){
@@ -96,6 +96,7 @@ class Machine{
 
   turnRight(){
     this.angle -= 300/framePerSecond;
+    this.angle = Math.floor(angle);
     this.radian = -this.angle * Math.PI/ 180.0;
   }
 
@@ -108,6 +109,7 @@ class Machine{
 
   turnLeft(){
     this.angle += 300/framePerSecond;
+    this.angle = Math.floor(angle);
     this.radian = -this.angle * Math.PI/ 180.0;
   }
 
