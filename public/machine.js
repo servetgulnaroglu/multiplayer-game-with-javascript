@@ -96,7 +96,7 @@ class Machine{
 
   turnRight(){
     this.angle -= 300/framePerSecond;
-    this.angle = Math.floor(angle);
+    this.angle = Math.floor(this.angle);
     this.radian = -this.angle * Math.PI/ 180.0;
   }
 
@@ -109,7 +109,7 @@ class Machine{
 
   turnLeft(){
     this.angle += 300/framePerSecond;
-    this.angle = Math.floor(angle);
+    this.angle = Math.floor(this.angle);
     this.radian = -this.angle * Math.PI/ 180.0;
   }
 
