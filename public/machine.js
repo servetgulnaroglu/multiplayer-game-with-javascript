@@ -3,7 +3,7 @@ class Machine{
     this.playerName = playerName;
     this.x = x;
     this.y = y;
-    this.angle = Math.floor(angle);
+    this.angle = angle;
     this.speed = 120/framePerSecond;
     this.size = 32;
     this.radian = this.angle * Math.PI/ 180.0;
