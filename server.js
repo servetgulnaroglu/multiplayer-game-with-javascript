@@ -21,8 +21,8 @@ function newConnection(socket){
   machines[socket.id] = {
     machine: {
       playerName: 'inLobby',
-      x: -1200.0 * 1.0,
-      y: 0.0 * 1.0,
+      x: -1200.5,
+      y: 0.1,
       angle: 0,
       speed: 4,
       size: 32,
