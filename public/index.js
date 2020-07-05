@@ -150,6 +150,8 @@ function show(){
 function update(){
   canvasContext.clearRect(-1000, -1000, maxCanvasWidth + 2000, maxCanvasHeight + 2000);
   checkKeys(); 
+  myMachine.x *= 1.0;
+  myMachine.y *= 1.0;
   if(myMachine.health >= 0 ){
     socket.emit('frame', myMachine);
   }
