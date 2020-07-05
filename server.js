@@ -21,14 +21,14 @@ function newConnection(socket){
   machines[socket.id] = {
     machine: {
       playerName: 'inLobby',
-      x: -1200.0,
-      y: 0.0,
+      x: -1200.0 * 1.0,
+      y: 0.0 * 1.0,
       angle: 0,
       speed: 4,
       size: 32,
-      radian: 0, 
-      headX: 0,
-      headX: 0, 
+      radian: 0 * 1.0, 
+      headX: 0.0 * 1.0,
+      headX: 0.0 * 1.0, 
       bullets: [],
       health: 100
     }
