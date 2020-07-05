@@ -254,7 +254,7 @@ function showMachines(){
   }
   for(var i = 0; i < keys.length; i++){ 
     if(myID != keys[i] && machines[keys[i]].machine.health > 0){
-      machine = new Machine(machines[keys[i]].machine.x, machines[keys[i]].machine.y, machines[keys[i]].machine.angle, machines[keys[i]].machine.health, machines[keys[i]].machine.playerName, machines[keys[i]].machine.bullets);
+      machine = new Machine(machines[keys[i]].machine.x, machines[keys[i]].machine.y, machines[keys[i]].machine.angle, machines[keys[i]].machine.health, machines[keys[i]].machine.playerName, Array.isArray(machines[keys[i]].machine.bullets)?  machines[keys[i]].machine.bullets : []);
       machine.call(); 
     }
   }

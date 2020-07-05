@@ -1,7 +1,7 @@
 class Bullet{
   constructor(x, y, radian, range){
-    this.x = x;
-    this.y = y;
+    this.x = x * 1.0;
+    this.y = y * 1.0;
     this.startX = x;
     this.startY = y;
     this.radian = radian;

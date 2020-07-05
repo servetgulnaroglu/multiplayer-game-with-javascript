@@ -1,8 +1,8 @@
 class Machine{
   constructor(x, y, angle, health, playerName, bullets){
     this.playerName = playerName;
-    this.x = x;
-    this.y = y;
+    this.x = x * 1.0;
+    this.y = y * 1.0;
     this.angle = angle;
     this.speed = 120/framePerSecond;
     this.size = 32;
