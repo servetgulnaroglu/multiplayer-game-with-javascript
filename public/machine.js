@@ -4,7 +4,7 @@ class Machine{
     this.x = x * 1.0;
     this.y = y * 1.0;
     this.angle = angle;
-    this.speed = 120/framePerSecond;
+    this.speed = 120.0/framePerSecond;
     this.size = 32;
     this.radian = this.angle * Math.PI/ 180.0;
     this.headX = this.x + this.size / 2 + Math.cos(this.radian) * this.size / 2;

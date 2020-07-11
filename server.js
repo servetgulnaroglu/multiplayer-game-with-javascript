@@ -48,10 +48,7 @@ function newConnection(socket){
     }
     io.emit('sortedPlayers', playerOrder);
   }, 1000);
-  socket.on('frame', (data) => {
-    if(!Array.isArray(data.bullets)){
-      data.bullets = [];
-    }
+  socket.on('frame', (data) => { 
     machines[socket.id] = {
       machine: data
     };

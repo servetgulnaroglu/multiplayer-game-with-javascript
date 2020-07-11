@@ -4,8 +4,8 @@ class Bullet{
     this.y = y * 1.0;
     this.startX = x;
     this.startY = y;
-    this.radian = radian;
-    this.speed = 300/framePerSecond;
+    this.radian = radian * 1.0;
+    this.speed = 300 * 1.0/framePerSecond;
     this.size = 5;
     this.range = range;
   }
