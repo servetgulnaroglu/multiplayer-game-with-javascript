@@ -1,6 +1,7 @@
 var socket; 
 var machines = {};
-var framePerSecond = 45;
+var framePerSecond = 50;
+var gameLoopMS = 20;
 socket = io.connect('https://multiplayer-game-js.herokuapp.com/');
 //socket = io.connect('http://localhost:3000/')
 var myID;
@@ -382,12 +383,12 @@ function showParticles(bullet){
     for(var i = 0; i < particles.length; i++){
       particles[i].show();
     }
-  }, 1000/framePerSecond);
+  },1000/framePerSecond);
   var particle2Loop = setInterval(function(){
     for( var i = 0; i < particles2.length; i++){
       particles2[i].show();
     }
-  }, 1000/ framePerSecond);
+  }, 1000/framePerSecond);
 
   setTimeout(function(){
     clearInterval(particle2Loop);
