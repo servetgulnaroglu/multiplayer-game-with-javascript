@@ -11,7 +11,7 @@ class Bullet{
   }
 
   move(){ 
-    this.y += Math.sin(this.radian) * this.speed;
+    this.y += Math.sin(this.radian) * this.speed * 1.0;
     this.x += Math.cos(this.radian) * this.speed; 
   }
 
